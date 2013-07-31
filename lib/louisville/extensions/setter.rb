@@ -11,7 +11,7 @@ module Louisville
             attr_accessible :desired_louisville_slug, louisville_config[:setter].to_sym
           end
 
-          alias_method_chain :extract_louisville_slug_value, :setter
+          alias_method_chain :extract_louisville_slug_value_from_field, :setter
           alias_method_chain :should_uniquify_louisville_slug?, :setter
           
         end
@@ -19,8 +19,8 @@ module Louisville
 
       protected
 
-      def extract_louisville_slug_value_with_setter
-        self.desired_louisville_slug || extract_louisville_slug_value_without_setter
+      def extract_louisville_slug_value_from_field_with_setter
+        self.desired_louisville_slug || extract_louisville_slug_value_from_field_without_setter
       end
 
       def should_uniquify_louisville_slug_with_setter?

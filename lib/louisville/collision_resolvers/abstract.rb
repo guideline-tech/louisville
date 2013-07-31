@@ -2,8 +2,6 @@ module Louisville
   module CollisionResolvers
     class Abstract
 
-      SLUG_MATCHER = /^(.+)--([\d]+)?$/
-
       def initialize(instance, options = {})
         @instance = instance
         @options  = options
@@ -21,11 +19,23 @@ module Louisville
         false
       end
 
-      protected
-
-      def unique_in_table?
-        raise NotImplementedError
+      def assign_slug(val)
+        @instance.send("#{config[:column]}=", val)
       end
+
+      def read_slug
+        @instance.send(config[:column])
+      end
+
+      def slug_base(compare = nil)
+        Louisville::Util.slug_base(compare || @instance.louisville_slug.to_s)
+      end
+
+      def slug_sequence(compare = nil)
+        Louisville::Util.slug_sequence(compare || @instance.louisville_slug.to_s)
+      end
+
+      protected
 
       def using_history?
         config.option?(:history)
@@ -36,19 +46,19 @@ module Louisville
         
         scope = ::Louisville::Slug.scoped
         scope = scope.where(:sluggable_type => klass.base_class.sti_name)
-        scope = scope.where(:slug_base => base_slug)
+        scope = scope.where(:slug_base => slug_base)
         scope = scope.where(:slug_sequence => slug_sequence)
         scope = scope.where("#{Louisville::Slug.quoted_table_name}.sluggable_id <> ?", @instance.id) if @instance.persisted?
 
-        scope.exists?
+        !scope.exists?
       end
 
       def unique_in_table?
         scope = klass.scoped
-        scope = scope.where("#{klass.quoted_table_name} <> ?", @instance.id) if @instance.persisted?
+        scope = scope.where("#{klass.quoted_table_name}.#{klass.primary_key} <> ?", @instance.id) if @instance.persisted?
         scope = scope.where(config[:column] => @instance.louisville_slug)
 
-        scope.exists?
+        !scope.exists?
       end
 
 
@@ -58,16 +68,6 @@ module Louisville
 
       def klass
         @instance.class
-      end
-
-      def slug_base(compare = nil)
-        (compare || @instance.louisville_slug.to_s) =~ SLUG_MATCHER
-        $1
-      end
-
-      def slug_sequence(compare = nil)
-        (compare || @instance.louisville_slug.to_s) =~ SLUG_MATCHER
-        [$2.to_i, 1].max
       end
 
       def next_slug(slug)

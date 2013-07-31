@@ -5,7 +5,8 @@ module Louisville
   autoload :Config,   'louisville/config'
   autoload :Slug,     'louisville/slug'
   autoload :Slugger,  'louisville/slugger'
-
+  autoload :Util,     'louisville/util'
+  
   module Extensions
 
     autoload :Collision,  'louisville/extensions/collision'

@@ -1,14 +1,14 @@
 module Louisville
   module Slugger
 
-    def self.include(base)
+    def self.included(base)
       base.extend ClassMethods
       base.class_eval do
 
         before_validation :apply_louisville_slug
         before_validation :make_louisville_slug_unique, :if => :should_uniquify_louisville_slug?
 
-        validate :validate_louisville_slug_unique
+        validate :validate_louisville_slug
       end
     end
 
@@ -20,8 +20,6 @@ module Louisville
         @louisville_slugger
       end
 
-      protected
-
       def louisville_config
         @louisville_slugger || ::Louisville::Config.new
       end
@@ -29,7 +27,7 @@ module Louisville
     end
 
     def louisville_slug
-      self.send(louisville_config[:column])
+      self.louisville_collision_resolver.read_slug
     end
 
     def louisville_config
@@ -40,14 +38,12 @@ module Louisville
 
 
     def louisville_slug=(val)
-      self.send("#{louisville_config[:column]}=", val)
+      self.louisville_collision_resolver.assign_slug(val)
     end
 
     def louisville_slug_changed?
       self.send("#{louisville_config[:column]}_changed?")
     end
-
-
 
     def apply_louisville_slug
       value = extract_louisville_slug_value_from_field
@@ -69,8 +65,18 @@ module Louisville
       louisville_collision_resolver.provides_collision_solution? && self.louisville_slug_changed?
     end
 
-    def validate_louisville_slug_unique
-      self.errors.add(louisville_config[:column], :uniqueness) unless louisville_collision_resolver.unique?
+    def validate_louisville_slug
+      if self.louisville_slug.blank?
+        self.errors.add(louisville_config[:column], :presence)
+        return false
+      end
+
+      unless louisville_collision_resolver.unique?
+        self.errors.add(louisville_config[:column], :uniqueness) 
+        return false
+      end
+
+      true
     end
 
   end

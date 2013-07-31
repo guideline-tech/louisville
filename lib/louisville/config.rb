@@ -4,17 +4,22 @@ module Louisville
     DEFAULTS = {
       :column => :slug,
       :finder => true,
-      :collision => false,
-      :setter => false
+      :collision => :none,
+      :setter => false,
+      :history => false
     }
 
     def initialize(field, options = {})
-      @options  = DEFAULTS.merge(options).merge(:field => @field)
+      @options  = DEFAULTS.merge(options).merge(:field => field)
+
+      # if false is provided we still need to use the none case
+      @options[:collision] ||= :none
+      @options[:setter]      = "desired_#{@options[:column]}" if @options[:setter] == true
     end
 
     def hook!(klass)
       modules.each do |modul|
-        klass.include modul
+        klass.send(:include, modul)
       end
     end
 
@@ -38,7 +43,7 @@ module Louisville
 
     def collision_resolver_class
       class_name = options_for(:collision)[:resolver] || option(:collision)
-      class_name.to_s.classify.contantize
+      Louisville::CollisionResolvers.const_get(:"#{class_name.to_s.classify}")
     end
 
     def extension_keys
@@ -49,8 +54,9 @@ module Louisville
 
     def modules
       extension_keys.map do |option|
-        ::Louisville::Extensions.const_get(option.to_s.classify)
-      end
+        ::Louisville::Extensions.const_get(option.to_s.classify) if self.option?(option)
+      end.compact
     end
 
-  end 
+  end
+end

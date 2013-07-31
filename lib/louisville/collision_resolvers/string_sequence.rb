@@ -17,10 +17,10 @@ module Louisville
       def next_valid_slug_from_table
         length_command  = klass.connection.adapter_name =~ /sqlserver/i ? 'LEN' : 'LENGTH'
         pk_col          = "#{klass.quoted_table_name}.#{klass.primary_key}"
-        col             = "#{klass.quoted_table_name}.#{column_name}"
+        col             = "#{klass.quoted_table_name}.#{config[:column]}"
 
         scope  = klass.select("#{col}")
-        scope  = scope.where("#{col} LIKE ?", "#{slug_base}--%")
+        scope  = scope.where("#{col} LIKE ?", "#{slug_base}%")
         scope  = scope.order("#{length_command}(#{col}) DESC, #{col} DESC")
 
         return nil unless record = scope.first
@@ -30,6 +30,8 @@ module Louisville
 
 
       def next_valid_slug_from_history
+        return nil unless using_history? 
+        
         scope = ::Louisville::Slug.scoped
         scope = scope.where(:sluggable_type => klass.base_class.sti_name)
         scope = scope.where(:slug_base => slug_base)

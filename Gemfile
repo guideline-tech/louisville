@@ -4,4 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 
+gem 'rake'
+gem 'mysql2'
 gem 'rspec'
+gem 'debugger'
