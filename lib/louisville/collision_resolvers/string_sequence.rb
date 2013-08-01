@@ -37,7 +37,7 @@ module Louisville
         scope = scope.where(:slug_base => slug_base)
         scope = scope.where("#{Louisville::Slug.quoted_table_name}.sluggable_id <> ?", @instance.id) if @instance.persisted?
 
-        "#{slug_base}-#{scope.maximum(:slug_sequence) + 1}"
+        "#{slug_base}-#{scope.maximum(:slug_sequence).to_i + 1}"
       end
 
     end
