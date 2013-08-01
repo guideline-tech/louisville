@@ -32,10 +32,10 @@ module Louisville
           seq_column = "#{louisville_config[:column]}_sequence"
 
           if self.column_names.include?(seq_column)
-            record = self.where(louisville_config[:column] => id).first
-          else
             base, seq = Louisville::Util.slug_parts(id)
             record = self.where(louisville_config[:column] => base, seq_column => seq).first
+          else
+            record = self.where(louisville_config[:column] => id).first
           end
 
           return record if record
