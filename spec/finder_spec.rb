@@ -10,6 +10,10 @@ describe Louisville::Extensions::Finder do
     slug :name, finder: true
   end
 
+  class FindeerUser < FinderUser
+
+  end
+
   it 'should allow a model to be found via its slug' do
     f = FinderUser.new
     f.name = 'harold'
@@ -22,6 +26,14 @@ describe Louisville::Extensions::Finder do
     lambda{
       FinderUser.find('dajlsflj290rjodsals')
     }.should raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it 'should be fine with inhertance' do
+    f = FindeerUser.new
+    f.name = 'harmon'
+    f.save.should be_true
+
+    FindeerUser.find('harmon').should eql(f)
   end
 
 

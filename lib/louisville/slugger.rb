@@ -21,7 +21,7 @@ module Louisville
       end
 
       def louisville_config
-        @louisville_slugger || ::Louisville::Config.new
+        @louisville_slugger || (superclass.respond_to?(:louisville_config) ? superclass.louisville_config : nil)
       end
 
     end
