@@ -32,7 +32,7 @@ describe 'Louisville::Slugger minimal integration' do
     u = MinimalUser.new
     u.save.should be_false
 
-    u.errors[:slug].to_s.should =~ /presen/
+    u.errors[:slug].to_s.should =~ /be blank/
   end
 
   it 'should validate that the slug is unique' do
@@ -44,7 +44,7 @@ describe 'Louisville::Slugger minimal integration' do
     u2.name = 'john'
     u2.save.should be_false
 
-    u2.errors[:slug].to_s.should =~ /unique/
+    u2.errors[:slug].to_s.should =~ /has already been taken/
   end
 
   it 'should provide a way to find a user via the slug' do

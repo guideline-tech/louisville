@@ -11,7 +11,7 @@ describe Louisville::Extensions::Setter do
 
   end
 
-  it 'should provide setters for the destired slug' do
+  it 'should provide setters for the desired slug' do
 
     u = SetterUser.new
     u.name = 'carl'
@@ -35,7 +35,7 @@ describe Louisville::Extensions::Setter do
 
     u2.save.should be_false
 
-    u2.errors[:slug].to_s.should =~ /unique/
+    u2.errors[:slug].to_s.should =~ /has already been taken/
 
   end
 

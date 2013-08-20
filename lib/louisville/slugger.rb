@@ -67,12 +67,12 @@ module Louisville
 
     def validate_louisville_slug
       if self.louisville_slug.blank?
-        self.errors.add(louisville_config[:column], :presence)
+        self.errors.add(louisville_config[:column], :blank)
         return false
       end
 
       unless louisville_collision_resolver.unique?
-        self.errors.add(louisville_config[:column], :uniqueness) 
+        self.errors.add(louisville_config[:column], :taken) 
         return false
       end
 
