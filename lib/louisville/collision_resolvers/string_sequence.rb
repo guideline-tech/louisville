@@ -2,7 +2,7 @@ module Louisville
   module CollisionResolvers
 
     class StringSequence < Abstract
-      
+
 
       def provides_collision_solution?
         true
@@ -20,7 +20,7 @@ module Louisville
         col             = "#{klass.quoted_table_name}.#{config[:column]}"
 
         scope  = klass.select("#{col}")
-        scope  = scope.where("#{col} LIKE ?", "#{slug_base}%")
+        scope  = scope.where("#{col} = ? OR #{col} LIKE ?", slug_base, "#{slug_base}--%")
         scope  = scope.order("#{length_command}(#{col}) DESC, #{col} DESC")
 
         return nil unless record = scope.first
@@ -30,8 +30,8 @@ module Louisville
 
 
       def next_valid_slug_from_history
-        return nil unless using_history? 
-        
+        return nil unless using_history?
+
         scope = Louisville::Util.scope_from(::Louisville::Slug)
         scope = scope.where(:sluggable_type => klass.base_class.sti_name)
         scope = scope.where(:slug_base => slug_base)

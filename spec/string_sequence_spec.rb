@@ -29,6 +29,13 @@ describe Louisville::CollisionResolvers::StringSequence do
     c.save.should be_true
 
     c.slug.should eql('charlie--3')
+
+    # ensures the sql matcher is working correctly
+    b.reload
+    b.name = 'Charlie'
+    b.save
+
+    b.slug.should eql('charlie--2')
   end
 
 end

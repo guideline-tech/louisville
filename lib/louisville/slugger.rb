@@ -48,7 +48,17 @@ module Louisville
     def apply_louisville_slug
       value = extract_louisville_slug_value_from_field
       value = value.parameterize if value
-      self.louisville_slug = value
+
+      # the value may have changed but the parameterized value may be the same
+      # charlie vs Charlie.
+      if self.louisville_slug
+        base = Louisville::Util.slug_base(self.louisville_slug)
+        if base != value
+          self.louisville_slug = value
+        end
+      else
+        self.louisville_slug = value
+      end
     end
 
     def extract_louisville_slug_value_from_field
@@ -72,7 +82,7 @@ module Louisville
       end
 
       unless louisville_collision_resolver.unique?
-        self.errors.add(louisville_config[:column], :taken) 
+        self.errors.add(louisville_config[:column], :taken)
         return false
       end
 
