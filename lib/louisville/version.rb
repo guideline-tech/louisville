@@ -4,7 +4,7 @@ module Louisville
     MAJOR = 0
     MINOR = 0
     PATCH = 1
-    PRE = 'beta3'
+    PRE = 'beta4'
 
     def self.to_s
       [MAJOR, MINOR, PATCH, PRE].compact.join('.')
