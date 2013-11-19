@@ -7,13 +7,13 @@ module Louisville
           attr_accessor :desired_louisville_slug
           alias_method :"#{louisville_config[:setter]}=", :desired_louisville_slug=
 
-          if accessible_attributes.any?
+          if respond_to?(:accessible_attributes) && accessible_attributes.any?
             attr_accessible :desired_louisville_slug, louisville_config[:setter].to_sym
           end
 
           alias_method_chain :extract_louisville_slug_value_from_field, :setter
           alias_method_chain :should_uniquify_louisville_slug?, :setter
-          
+
         end
       end
 
