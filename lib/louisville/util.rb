@@ -5,6 +5,10 @@ module Louisville
 
     class << self
 
+      def numeric?(id)
+        Integer === id || !!(id.to_s =~ /^[\d]+$/)
+      end
+
       def slug_base(compare)
         compare =~ SLUG_MATCHER
         $1 || compare

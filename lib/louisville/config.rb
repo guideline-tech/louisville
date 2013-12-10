@@ -23,10 +23,6 @@ module Louisville
       end
     end
 
-    def numeric?(id)
-      Integer === id || !!(id.to_s =~ /^[\d]+$/)
-    end
-
     def option?(key)
       !!option(key)
     end

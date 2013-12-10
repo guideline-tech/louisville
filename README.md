@@ -33,6 +33,7 @@ Need a litte more? The `slug` class method accepts an options hash.
 | :column    | Any String   | "slug"        | Configures the slug column. "slug" is the default, provide to override. |
 | :finder    | true         | true          | Adds the finder extension. The finder extension allows `class.find('slug')` to work. |
 | :finder    | false        | true          | Removes the finder option, disabling the `class.find` override. |
+| :collision | :none        | :none         | Do not handle collisions, add a validation error when the slug is not unique. |
 | :collision | :string_sequence | :none     | Handles collisions by appending a sequence to the slug. A generated slug which collides with an existing slug will gain a "--number". So if there was a record with "foobar" as it's slug and another record generated the slug "foobar", the second record would save as "foobar--2". |
 | :collision | :numeric\_sequence | :none    | Handles collisions my incrementing a numeric column named `"#{slug\_column}\_sequence"`. With this configuration, the slug column may not be unique but the `[slug, slug\_sequence]` combination would be. |
 | :setter    | Any Valid Ruby Method String | false | Allows the slug generation to be short circuited by providing a setter. Think about a user choosing their username or a page having an seo title. Collisions with the provided value will not be resolved, meaning a validation error will occur if an existing slug is provided. |
@@ -41,6 +42,15 @@ Need a litte more? The `slug` class method accepts an options hash.
 ### Collision Resolvers
 
 Two collision resolvers are included in Louisville. You can decide which to use based on the profile of your app. If you're app is read heavy and/or rarely colliding on write, :string\_sequence is fine for you. If your app is write heavy or deals with collisions often, :numeric\_sequence is a better choice.
+
+**collision: :string_sequence**
+
+To use the string sequence collision resolver, configure your schema like so:
+
+```ruby
+add_column :players, :slug, :string
+add_index  :players, :slug, unique: true
+```
 
 **collision: :numeric_sequence**
 
@@ -117,3 +127,5 @@ class Player
   slug :name, upcase: {remove_numbers: true}
 end
 ```
+
+Classes with the Louisville::Slugger module have access to the `louisville_config` both at the class and instance level. The louisville config provides you with a way to grab the options for your (or any) extension as well as determine what extensions are enabled. For instance, if you wanted to know if the history extension was being used you would do `louisville_config.option?(:history)`.

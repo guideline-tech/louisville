@@ -27,7 +27,7 @@ module Louisville
 
           id = id.id if ActiveRecord::Base === id
 
-          return super(id) if louisville_config.numeric?(id)
+          return super(id) if Louisville::Util.numeric?(id)
 
           seq_column = "#{louisville_config[:column]}_sequence"
 
@@ -55,7 +55,7 @@ module Louisville
         def exists?(id = :none)
           id = id.id if ActiveRecord::Base === id
 
-          return super(id) if louisville_config.numeric?(id)
+          return super(id) if Louisville::Util.numeric?(id)
 
           if id === String
             return true       if super(louisville_config[:column] => id)
