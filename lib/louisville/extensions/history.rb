@@ -20,7 +20,7 @@ module Louisville
         return unless current_value
 
         base, seq = Louisville::Util.slug_parts(current_value)
-        
+
         self.historical_slugs.where(slug_base: base, slug_sequence: seq).delete_all
       end
 

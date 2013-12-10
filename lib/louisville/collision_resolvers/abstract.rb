@@ -43,7 +43,7 @@ module Louisville
 
       def unique_in_history?
         return true unless using_history?
-        
+
         scope = Louisville::Util.scope_from(::Louisville::Slug)
         scope = scope.where(:sluggable_type => klass.base_class.sti_name)
         scope = scope.where(:slug_base => slug_base)

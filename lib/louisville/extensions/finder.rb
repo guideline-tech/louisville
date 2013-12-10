@@ -63,7 +63,7 @@ module Louisville
 
             base, seq = Louisville::Util.slug_parts(id)
 
-            historical_slugs.exists?(:slug_base => base, :slug_sequence => seq)
+            historical_slugs.where(:slug_base => base, :slug_sequence => seq).exists?
 
           elsif ActiveRecord::VERSION::MAJOR == 3
             return super(id == :none ? false : id)

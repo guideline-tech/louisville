@@ -20,10 +20,13 @@ describe 'Louisville::Slugger minimal history integration' do
   it 'should push the previous slug into the history if it changes' do
     u = MinimalHistoryUser.new
     u.name = 'joe'
-    u.save.should be_true
 
     lambda{
-      u.name = 'joey'
+      u.save.should be_true
+    }.should_not change(Louisville::Slug, :count)
+
+    u.name = 'joey'
+    lambda{
       u.save.should be_true
     }.should change(Louisville::Slug, :count).by(1)
 
@@ -90,7 +93,4 @@ describe 'Louisville::Slugger minimal history integration' do
     MinimalHistoryUser.find('james').should eql(u)
 
   end
-
-
-
 end

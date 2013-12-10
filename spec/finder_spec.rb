@@ -49,18 +49,18 @@ describe Louisville::Extensions::Finder do
 
   it 'should raise an error with history enabled' do
     f = FinderHistoryUser.new
-    f.name = 'harold'
+    f.name = 'happ'
     f.save.should be_true
 
     f.reload
-    f.name = 'harry'
+    f.name = 'happy'
     f.save.should be_true
 
-    f.slug.should eql('harry')
+    f.slug.should eql('happy')
     Slug.where(sluggable_type: 'FinderHistoryUser', sluggable_id: f.id).count.should eql(1)
 
-    FinderHistoryUser.find('harry').should eql(f)
-    FinderHistoryUser.find('harold').should eql(f)
+    FinderHistoryUser.find('happ').should eql(f)
+    FinderHistoryUser.find('happy').should eql(f)
 
     lambda{
       FinderHistoryUser.find('harvey')
