@@ -44,7 +44,8 @@ module Louisville
 
             base, seq = Louisville::Util.slug_parts(id)
 
-            joins(:historical_slugs).where("#{Louisville::Slug.quoted_table_name}.slug_base = ? AND #{Louisville::Slug.quoted_table_name}.slug_sequence = ?", base, seq).first
+            record = joins(:historical_slugs).where("#{Louisville::Slug.quoted_table_name}.slug_base = ? AND #{Louisville::Slug.quoted_table_name}.slug_sequence = ?", base, seq).first
+            record || super(id)
           else
             return super(id)
           end
