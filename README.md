@@ -26,7 +26,7 @@ end
 ```
 
 
-The `slug` class method accepts an options hash. 
+Need a litte more? The `slug` class method accepts an options hash.
 
 | Option Key | Option Value | Default Value | What it does |
 | ---------- | ------------ | ------------- | ------------ |
@@ -35,7 +35,7 @@ The `slug` class method accepts an options hash.
 | :finder    | false        | true          | Removes the finder option, disabling the `class.find` override. |
 | :collision | :string_sequence | :none     | Handles collisions by appending a sequence to the slug. A generated slug which collides with an existing slug will gain a "--number". So if there was a record with "foobar" as it's slug and another record generated the slug "foobar", the second record would save as "foobar--2". |
 | :collision | :numeric\_sequence | :none    | Handles collisions my incrementing a numeric column named `"#{slug\_column}\_sequence"`. With this configuration, the slug column may not be unique but the `[slug, slug\_sequence]` combination would be. |
-| :setter    | Any Valid Ruby Method String | false | Allows the slug generation to be short circuited by providing a setter. Think about a user choosing their username or a page having an seo title. Collisions with the provided value will not be resolved, meaning a validation error will occur if an existing slug is provided. |  
+| :setter    | Any Valid Ruby Method String | false | Allows the slug generation to be short circuited by providing a setter. Think about a user choosing their username or a page having an seo title. Collisions with the provided value will not be resolved, meaning a validation error will occur if an existing slug is provided. |
 | :history   | true         | false         | When a record's slug changes this will create a record in the slugs table. The finder and collision resolver extensions respect the existence of the history table if this option is enabled.
 
 ### Collision Resolvers
@@ -93,9 +93,9 @@ module Louisville
           alias_method_chain :sanitize_louisville_slug, :upcase
         end
       end
-      
+
       protected
-      
+
       def sanitize_louisville_slug_with_upcase(value)
         value = sanitize_louisville_slug_without_upcase(value).upcase
         value = value.gsub(/[\d]+/, '') if louisville_config.options_for(:upcase)[:remove_numbers]
@@ -111,7 +111,7 @@ Then, in your class you would do:
 ```ruby
 class Player
   include Louisville::Slugger
-  
+
   slug :name, upcase: true
   # or if you wanted to provide options for the module...
   slug :name, upcase: {remove_numbers: true}
