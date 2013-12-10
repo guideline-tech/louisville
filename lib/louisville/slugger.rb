@@ -47,7 +47,7 @@ module Louisville
 
     def apply_louisville_slug
       value = extract_louisville_slug_value_from_field
-      value = value.parameterize if value
+      value = sanitize_louisville_slug(value) if value
 
       # the value may have changed but the parameterized value may be the same
       # charlie vs Charlie.
@@ -59,6 +59,10 @@ module Louisville
       else
         self.louisville_slug = value
       end
+    end
+
+    def sanitize_louisville_slug(value)
+      value.parameterize
     end
 
     def extract_louisville_slug_value_from_field
