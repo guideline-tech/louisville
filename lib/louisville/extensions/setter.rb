@@ -1,6 +1,12 @@
+#
+# Enables the slug to be dictated by the instance.
 module Louisville
   module Extensions
     module Setter
+
+      def self.configure_default_options(options)
+        options[:setter] = "desired_#{options[:column]}" if options[:setter] == true
+      end
 
       def self.included(base)
         base.class_eval do

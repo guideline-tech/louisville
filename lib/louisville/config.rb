@@ -7,18 +7,18 @@ module Louisville
       :collision => :none,
       :setter => false,
       :history => false
-    }
+    }.freeze
 
     def initialize(field, options = {})
       @options  = DEFAULTS.merge(options).merge(:field => field)
 
       # if false is provided we still need to use the none case
       @options[:collision] ||= :none
-      @options[:setter]      = "desired_#{@options[:column]}" if @options[:setter] == true
     end
 
     def hook!(klass)
       modules.each do |modul|
+        modul.configure_default_options(@options) if modul.respond_to?(:configure_default_options)
         klass.send(:include, modul)
       end
     end
