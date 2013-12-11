@@ -13,28 +13,28 @@ describe 'Louisville::Slugger variations' do
   it 'should use the provided column as the storage location' do
     u = ColumnVariationUser.new
     u.name = 'bob'
-    u.save.should be_true
+    expect(u.save).to eq(true)
 
-    u.slug.should be_nil
-    u.other_slug.should eql('bob')
-    u.other_slug_sequence.should eql(1)
+    expect(u.slug).to eq(nil)
+    expect(u.other_slug).to eq('bob')
+    expect(u.other_slug_sequence).to eq(1)
   end
 
 
   it 'should not impact the history columns' do
     u = ColumnVariationUser.new
     u.name = 'bill'
-    u.save.should be_true
+    expect(u.save).to eq(true)
 
     u.name = 'billy'
-    u.save.should be_true
+    expect(u.save).to eq(true)
 
     history = Louisville::Slug.last
 
-    history.slug_base.should eql('bill')
-    history.slug_sequence.should eql(1)
+    expect(history.slug_base).to eq('bill')
+    expect(history.slug_sequence).to eq(1)
 
-    ColumnVariationUser.find('billy').should eql(u)
-    ColumnVariationUser.find('bill').should eql(u)
+    expect(ColumnVariationUser.find('billy')).to eq(u)
+    expect(ColumnVariationUser.find('bill')).to eq(u)
   end
 end

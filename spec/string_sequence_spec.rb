@@ -13,29 +13,29 @@ describe Louisville::CollisionResolvers::StringSequence do
   it 'should solve collisions by appending the sequence to the slug' do
     a = SsUser.new
     a.name = 'charlie'
-    a.save.should be_true
+    expect(a.save).to eq(true)
 
-    a.slug.should eql('charlie')
-    a.slug_sequence.should eql(1)
+    expect(a.slug).to eq('charlie')
+    expect(a.slug_sequence).to eq(1)
 
     b = SsUser.new
     b.name = 'charlie'
-    b.save.should be_true
+    expect(b.save).to eq(true)
 
-    b.slug.should eql('charlie--2')
+    expect(b.slug).to eq('charlie--2')
 
     c = SsUser.new
     c.name = 'charlie'
-    c.save.should be_true
+    expect(c.save).to eq(true)
 
-    c.slug.should eql('charlie--3')
+    expect(c.slug).to eq('charlie--3')
 
     # ensures the sql matcher is working correctly
     b.reload
     b.name = 'Charlie'
     b.save
 
-    b.slug.should eql('charlie--2')
+    expect(b.slug).to eq('charlie--2')
   end
 
 end

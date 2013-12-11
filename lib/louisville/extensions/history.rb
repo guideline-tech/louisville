@@ -11,6 +11,7 @@ module Louisville
   module Extensions
     module History
 
+
       def self.included(base)
         base.class_eval do
 
@@ -23,7 +24,11 @@ module Louisville
         end
       end
 
+
+
       protected
+
+
 
       # First, we delete any previous slugs that this record owned that match the current slug.
       # This allows a record to return to a previous slug without duplication in the history table.
@@ -34,8 +39,9 @@ module Louisville
 
         base, seq = Louisville::Util.slug_parts(current_value)
 
-        self.historical_slugs.where(slug_base: base, slug_sequence: seq).delete_all
+        self.historical_slugs.where(:slug_base => base, :slug_sequence => seq).delete_all
       end
+
 
       # Then we generate a new historical slug for the previous value (if there is one).
       def generate_historical_slug

@@ -13,24 +13,24 @@ describe Louisville::CollisionResolvers::NumericSequence do
   it 'should solve collisions by incrementing the sequence column' do
     a = NsUser.new
     a.name = 'chris'
-    a.save.should be_true
+    expect(a.save).to eq(true)
 
-    a.slug.should eql('chris')
-    a.slug_sequence.should eql(1)
+    expect(a.slug).to eq('chris')
+    expect(a.slug_sequence).to eq(1)
 
     b = NsUser.new
     b.name = 'chris'
-    b.save.should be_true
+    expect(b.save).to eq(true)
 
-    b.slug.should eql('chris')
-    b.slug_sequence.should eql(2)
+    expect(b.slug).to eq('chris')
+    expect(b.slug_sequence).to eq(2)
 
     c = NsUser.new
     c.name = 'chris'
-    c.save.should be_true
+    expect(c.save).to eq(true)
 
-    c.slug.should eql('chris')
-    c.slug_sequence.should eql(3)
+    expect(c.slug).to eq('chris')
+    expect(c.slug_sequence).to eq(3)
   end
 
 end

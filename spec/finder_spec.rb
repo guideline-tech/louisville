@@ -7,7 +7,7 @@ describe Louisville::Extensions::Finder do
 
     include Louisville::Slugger
 
-    slug :name, finder: true
+    slug :name, :finder => true
   end
 
   class FindeerUser < FinderUser
@@ -18,7 +18,7 @@ describe Louisville::Extensions::Finder do
     self.table_name = :users
     include Louisville::Slugger
 
-    slug :name, finder: true, history: true
+    slug :name, :finder => true, :history => true
   end
 
   class Slug < ActiveRecord::Base
@@ -28,43 +28,45 @@ describe Louisville::Extensions::Finder do
   it 'should allow a model to be found via its slug' do
     f = FinderUser.new
     f.name = 'harold'
-    f.save.should be_true
+    expect(f.save).to eq(true)
 
-    FinderUser.find('harold').should eql(f)
+    expect(FinderUser.find('harold')).to eq(f)
   end
 
   it 'should blow up when nothing can be found' do
-    lambda{
+    expect{
       FinderUser.find('dajlsflj290rjodsals')
-    }.should raise_error(ActiveRecord::RecordNotFound)
+    }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
   it 'should be fine with inhertance' do
     f = FindeerUser.new
     f.name = 'harmon'
-    f.save.should be_true
+    expect(f.save).to eq(true)
 
-    FindeerUser.find('harmon').should eql(f)
+    expect(FindeerUser.find('harmon')).to eq(f)
   end
 
   it 'should raise an error with history enabled' do
     f = FinderHistoryUser.new
     f.name = 'happ'
-    f.save.should be_true
+    expect(f.save).to eq(true)
 
     f.reload
     f.name = 'happy'
-    f.save.should be_true
+    expect(f.save).to eq(true)
 
-    f.slug.should eql('happy')
-    Slug.where(sluggable_type: 'FinderHistoryUser', sluggable_id: f.id).count.should eql(1)
+    expect(f.slug).to eq('happy')
+    expect(
+      Slug.where(:sluggable_type => 'FinderHistoryUser', :sluggable_id => f.id).count
+    ).to eq(1)
 
-    FinderHistoryUser.find('happ').should eql(f)
-    FinderHistoryUser.find('happy').should eql(f)
+    expect(FinderHistoryUser.find('happ')).to eq(f)
+    expect(FinderHistoryUser.find('happy')).to eq(f)
 
-    lambda{
+    expect{
       FinderHistoryUser.find('harvey')
-    }.should raise_error(ActiveRecord::RecordNotFound)
+    }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
 

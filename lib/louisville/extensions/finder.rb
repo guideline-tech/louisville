@@ -1,6 +1,10 @@
+#
+# The finder extension allows your class to use find('slug') to query for your record.
+# If the history extension is enabled it will also query the history table to see if the
 module Louisville
   module Extensions
     module Finder
+
 
       def self.included(base)
         base.extend ClassMethods
@@ -10,6 +14,8 @@ module Louisville
           end
         end
       end
+
+
 
       module ClassMethods
         private
@@ -21,10 +27,12 @@ module Louisville
         end
       end
 
+
+
       module RelationMethods
 
-        def find_one(id)
 
+        def find_one(id)
           id = id.id if ActiveRecord::Base === id
 
           return super(id) if Louisville::Util.numeric?(id)
@@ -44,34 +52,32 @@ module Louisville
 
             base, seq = Louisville::Util.slug_parts(id)
 
-            record = joins(:historical_slugs).where("#{Louisville::Slug.quoted_table_name}.slug_base = ? AND #{Louisville::Slug.quoted_table_name}.slug_sequence = ?", base, seq).first
-            record || super(id)
+            record = Louisville::Slug.where(:slug_base => base, :slug_sequence => seq, :sluggable_type => name).select(:sluggable_id).first
+            super(record.try(:sluggable_id) || id)
           else
             return super(id)
           end
-
         end
+
 
         def exists?(id = :none)
           id = id.id if ActiveRecord::Base === id
 
           return super(id) if Louisville::Util.numeric?(id)
 
-          if id === String
+          if String === id
             return true       if super(louisville_config[:column] => id)
             return super(id)  unless louisville_config.option?(:history)
 
             base, seq = Louisville::Util.slug_parts(id)
 
-            historical_slugs.where(:slug_base => base, :slug_sequence => seq).exists?
+            Louisville::Slug.where(:slug_base => base, :slug_sequence => seq, :sluggable_type => name).exists?
 
           elsif ActiveRecord::VERSION::MAJOR == 3
             return super(id == :none ? false : id)
           else
             return super(id)
           end
-
-
         end
 
       end

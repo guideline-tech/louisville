@@ -33,9 +33,8 @@ Need a litte more? The `slug` class method accepts an options hash.
 | :column    | Any String   | "slug"        | Configures the slug column. "slug" is the default, provide to override. |
 | :finder    | true         | true          | Adds the finder extension. The finder extension allows `class.find('slug')` to work. |
 | :finder    | false        | true          | Removes the finder option, disabling the `class.find` override. |
-| :collision | :none        | :none         | Do not handle collisions, add a validation error when the slug is not unique. |
-| :collision | :string_sequence | :none     | Handles collisions by appending a sequence to the slug. A generated slug which collides with an existing slug will gain a "--number". So if there was a record with "foobar" as it's slug and another record generated the slug "foobar", the second record would save as "foobar--2". |
-| :collision | :numeric\_sequence | :none    | Handles collisions my incrementing a numeric column named `"#{slug\_column}\_sequence"`. With this configuration, the slug column may not be unique but the `[slug, slug\_sequence]` combination would be. |
+| :collision | :string_sequence | false     | Handles collisions by appending a sequence to the slug. A generated slug which collides with an existing slug will gain a "--number". So if there was a record with "foobar" as it's slug and another record generated the slug "foobar", the second record would save as "foobar--2". |
+| :collision | :numeric\_sequence | false    | Handles collisions my incrementing a numeric column named `"#{slug\_column}\_sequence"`. With this configuration, the slug column may not be unique but the `[slug, slug\_sequence]` combination would be. |
 | :setter    | Any Valid Ruby Method String | false | Allows the slug generation to be short circuited by providing a setter. Think about a user choosing their username or a page having an seo title. Collisions with the provided value will not be resolved, meaning a validation error will occur if an existing slug is provided. |
 | :history   | true         | false         | When a record's slug changes this will create a record in the slugs table. The finder and collision resolver extensions respect the existence of the history table if this option is enabled.
 

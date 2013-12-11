@@ -12,85 +12,70 @@ describe 'Louisville::Slugger minimal history integration' do
 
   it 'should validate that the slug is present' do
     u = MinimalHistoryUser.new
-    u.save.should be_false
+    expect(u.save).to eq(false)
 
-    u.errors[:slug].to_s.should =~ /be blank/
+    expect(u.errors[:slug].to_s).to match(/be blank/)
   end
 
   it 'should push the previous slug into the history if it changes' do
     u = MinimalHistoryUser.new
     u.name = 'joe'
 
-    lambda{
-      u.save.should be_true
-    }.should_not change(Louisville::Slug, :count)
+    expect{
+      expect(u.save).to eq(true)
+    }.not_to change(Louisville::Slug, :count)
 
     u.name = 'joey'
-    lambda{
-      u.save.should be_true
-    }.should change(Louisville::Slug, :count).by(1)
+    expect{
+      expect(u.save).to eq(true)
+    }.to change(Louisville::Slug, :count).by(1)
 
-    u.slug.should eql('joey')
+    expect(u.slug).to eq('joey')
     history = Louisville::Slug.last
 
-    history.sluggable_type.should eql('MinimalHistoryUser')
-    history.sluggable_id.should eql(u.id)
+    expect(history.sluggable_type).to eq('MinimalHistoryUser')
+    expect(history.sluggable_id).to eq(u.id)
 
-    history.slug_base.should eql('joe')
-    history.slug_sequence.should eql(1)
+    expect(history.slug_base).to eq('joe')
+    expect(history.slug_sequence).to eq(1)
   end
 
   it 'should delete the slug from the history if it is reassigned' do
     u = MinimalHistoryUser.new
     u.name = 'phil'
-    u.save.should be_true
+    expect(u.save).to eq(true)
 
     u.name = 'philip'
-    u.save.should be_true
+    expect(u.save).to eq(true)
 
-    u.slug.should eql('philip')
+    expect(u.slug).to eq('philip')
 
     history = Louisville::Slug.last
 
-    history.sluggable.should eql(u)
+    expect(history.sluggable_type).to eq(u.class.name)
+    expect(history.sluggable_id).to eq(u.id)
 
     u.name = 'phil'
-    u.save.should be_true
+    expect(u.save).to eq(true)
 
     history2 = Louisville::Slug.last
 
-    Louisville::Slug.where(id: history.id).exists?.should be_false
-    history2.slug_base.should eql('philip')
-  end
-
-  it 'should validate that the slug is unique' do
-    u = MinimalHistoryUser.new
-    u.name = 'pete'
-    u.save.should be_true
-
-    u.name = 'peter'
-    u.save.should be_true
-    u.slug.should eql('peter')
-
-    u2 = MinimalHistoryUser.new
-    u2.name = 'pete'
-    u2.save.should be_false
-
-    u2.errors[:slug].to_s.should =~ /has already been taken/
+    expect(Louisville::Slug.where(:id => history.id).exists?).to eq(false)
+    expect(history2.slug_base).to eq('philip')
   end
 
   it 'should provide a way to find a user via the slug' do
     u = MinimalHistoryUser.new
     u.name = 'james'
-    u.save.should be_true
+    expect(u.save).to eq(true)
 
-    MinimalHistoryUser.find('james').should eql(u)
+    expect(MinimalHistoryUser.find('james')).to eq(u)
 
     u.name = 'jams'
-    u.save.should be_true
+    expect(u.save).to eq(true)
 
-    MinimalHistoryUser.find('jams').should eql(u)
-    MinimalHistoryUser.find('james').should eql(u)
+    expect(MinimalHistoryUser.find('jams')).to eq(u)
+    expect(MinimalHistoryUser.find('james')).to eq(u)
 
   end
 end

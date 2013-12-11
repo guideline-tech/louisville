@@ -17,9 +17,9 @@ describe Louisville::Extensions::Setter do
     u.name = 'carl'
     u.desired_slug = 'carljr'
 
-    u.save.should be_true
+    expect(u.save).to eq(true)
 
-    u.slug.should eql('carljr')
+    expect(u.slug).to eq('carljr')
 
   end
 
@@ -27,15 +27,15 @@ describe Louisville::Extensions::Setter do
 
     u = SetterUser.new
     u.name = 'carey'
-    u.save.should be_true
+    expect(u.save).to eq(true)
 
     u2 = SetterUser.new
     u2.name = 'kerry'
     u2.desired_slug = 'carey'
 
-    u2.save.should be_false
+    expect(u2.save).to eq(false)
 
-    u2.errors[:slug].to_s.should =~ /has already been taken/
+    expect(u2.errors[:slug].to_s).to match(/has already been taken/)
 
   end
 
