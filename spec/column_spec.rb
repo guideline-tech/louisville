@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Louisville::Slugger variations' do
+describe 'Louisville::Slugger column variations' do
 
   class ColumnVariationUser < ActiveRecord::Base
     self.table_name = :users

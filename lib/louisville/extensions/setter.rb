@@ -5,6 +5,7 @@
 # Provide `setter: true` or `setter: :name_of_accessor` to your slug() invocation.
 # No options are used.
 #
+
 module Louisville
   module Extensions
     module Setter
@@ -25,7 +26,6 @@ module Louisville
           end
 
           alias_method_chain :extract_louisville_slug_value_from_field, :setter
-
         end
       end
 

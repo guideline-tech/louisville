@@ -28,6 +28,11 @@ module Louisville
         [slug_base(compare), slug_sequence(compare)]
       end
 
+
+      def polymorphic_name(klass)
+        klass.base_class.sti_name
+      end
+
     end
 
   end

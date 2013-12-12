@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Louisville::Slugger minimal integration' do
+describe Louisville::Slugger do
 
   class MinimalUser < ActiveRecord::Base
     self.table_name = :users
@@ -35,7 +35,7 @@ describe 'Louisville::Slugger minimal integration' do
     expect(u.errors[:slug].to_s).to match(/be blank/)
   end
 
-  it 'should validate that the slug is unique' do
+  it 'should validate that the slug is unique by default' do
     u = MinimalUser.new
     u.name = 'john'
     expect(u.save).to eq(true)
@@ -53,6 +53,18 @@ describe 'Louisville::Slugger minimal integration' do
     expect(u.save).to eq(true)
 
     expect(MinimalUser.find('frank')).to eq(u)
+  end
+
+  it 'should not apply the slug if the field value changes but the slug base does not' do
+    u = MinimalUser.new
+    u.name = 'spencer'
+    expect(u.save).to eq(true)
+
+    u.name = 'Spencer'
+    expect(u).to be_changed
+
+    expect(u).to receive(:louisville_slug=).never
+    expect(u.save).to eq(true)
   end
 
 end

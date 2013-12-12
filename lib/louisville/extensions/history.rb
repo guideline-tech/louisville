@@ -7,6 +7,7 @@
 # Provide `history: true` to your slug() invocation.
 # No options are used.
 #
+
 module Louisville
   module Extensions
     module History

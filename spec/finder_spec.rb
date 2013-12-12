@@ -21,9 +21,6 @@ describe Louisville::Extensions::Finder do
     slug :name, :finder => true, :history => true
   end
 
-  class Slug < ActiveRecord::Base
-    self.table_name = :slugs
-  end
 
   it 'should allow a model to be found via its slug' do
     f = FinderUser.new
@@ -58,7 +55,7 @@ describe Louisville::Extensions::Finder do
 
     expect(f.slug).to eq('happy')
     expect(
-      Slug.where(:sluggable_type => 'FinderHistoryUser', :sluggable_id => f.id).count
+      Louisville::Slug.where(:sluggable_type => 'FinderHistoryUser', :sluggable_id => f.id).count
     ).to eq(1)
 
     expect(FinderHistoryUser.find('happ')).to eq(f)

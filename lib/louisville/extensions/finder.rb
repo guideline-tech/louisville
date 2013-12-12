@@ -1,6 +1,12 @@
 #
 # The finder extension allows your class to use find('slug') to query for your record.
-# If the history extension is enabled it will also query the history table to see if the
+# If the history extension is enabled it will also query the history table to see if
+# there are any previous slugs that match.
+#
+# The finder option is enabled by default, to disable provide `finder: false` to your slug() invocation.
+# No options are used.
+#
+
 module Louisville
   module Extensions
     module Finder
@@ -52,7 +58,7 @@ module Louisville
 
             base, seq = Louisville::Util.slug_parts(id)
 
-            record = Louisville::Slug.where(:slug_base => base, :slug_sequence => seq, :sluggable_type => name).select(:sluggable_id).first
+            record = Louisville::Slug.where(:slug_base => base, :slug_sequence => seq, :sluggable_type => ::Louisville::Util.polymorphic_name(self)).select(:sluggable_id).first
             super(record.try(:sluggable_id) || id)
           else
             return super(id)
@@ -71,7 +77,7 @@ module Louisville
 
             base, seq = Louisville::Util.slug_parts(id)
 
-            Louisville::Slug.where(:slug_base => base, :slug_sequence => seq, :sluggable_type => name).exists?
+            Louisville::Slug.where(:slug_base => base, :slug_sequence => seq, :sluggable_type => ::Louisville::Util.polymorphic_name(name)).exists?
 
           elsif ActiveRecord::VERSION::MAJOR == 3
             return super(id == :none ? false : id)

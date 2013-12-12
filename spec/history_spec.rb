@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Louisville::Slugger minimal history integration' do
+describe Louisville::Extensions::History do
 
   class MinimalHistoryUser < ActiveRecord::Base
     self.table_name = :users
@@ -77,5 +77,20 @@ describe 'Louisville::Slugger minimal history integration' do
     expect(MinimalHistoryUser.find('jams')).to eq(u)
     expect(MinimalHistoryUser.find('james')).to eq(u)
 
+  end
+
+  it 'should destroy the slugs when a record is destroyed' do
+    u = MinimalHistoryUser.new
+    u.name = 'jackford'
+    expect(u.save).to eq(true)
+
+    u.name = 'jackson'
+    expect{
+      expect(u.save).to eq(true)
+    }.to change(Louisville::Slug, :count).by(1)
+
+    expect{
+      u.destroy
+    }.to change(Louisville::Slug, :count).by(-1)
   end
 end

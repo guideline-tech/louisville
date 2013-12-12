@@ -1,3 +1,11 @@
+#
+# The collision extension handles collisions as part of the save process. It uses a CollisionResolver
+# object to handle the heavy lifting.
+#
+# Provide `collision: true`, or `collision: :name_of_collision_resolver` to your slug() invocation.
+# No options are used.
+#
+
 module Louisville
   module Extensions
     module Collision

@@ -62,9 +62,13 @@ module Louisville
       # charlie vs Charlie.
       if self.louisville_slug
         base = Louisville::Util.slug_base(self.louisville_slug)
+
+        # if the base hasn't changed let's not set the value since doing so may incur extra cost.
+        # namely, the numeric_sequence resolver would have to determine and apply the sequence.
         if base != value
           self.louisville_slug = value
         end
+
       else
         self.louisville_slug = value
       end

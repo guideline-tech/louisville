@@ -57,7 +57,7 @@ module Louisville
       def unique_in_history?
         return true unless config.option?(:history)
 
-        scope = ::Louisville::Slug.where(:sluggable_type => klass.base_class.sti_name)
+        scope = ::Louisville::Slug.where(:sluggable_type => ::Louisville::Util.polymorphic_name(klass))
         scope = scope.where(:slug_base => slug_base)
         scope = scope.where(:slug_sequence => slug_sequence)
         scope = scope.where("#{Louisville::Slug.quoted_table_name}.sluggable_id <> ?", @instance.id) if @instance.persisted?
