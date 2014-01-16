@@ -60,7 +60,7 @@ describe Louisville::Extensions::History do
 
     history2 = Louisville::Slug.last
 
-    expect(Louisville::Slug.where(:id => history.id).exists?).to eq(false)
+    expect(Louisville::Slug.where(:id => history.id).count).to eq(0)
     expect(history2.slug_base).to eq('philip')
   end
 
