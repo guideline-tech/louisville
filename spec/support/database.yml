@@ -1,0 +1,6 @@
+adapter: 'mysql2'
+host: localhost
+database: louisville_test
+encoding: utf8
+username: root
+password: 

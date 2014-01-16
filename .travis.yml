@@ -3,7 +3,8 @@ language: ruby
 services: mysql
 
 before_script:
-  - mysql -e 'create database makara_test;'
+  - mysql -e 'create database louisville_test;'
+  - cp spec/support/database.example.yml spec/support/database.yml
 
 before_install:
   - gem update --system 2.1.11
