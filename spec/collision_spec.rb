@@ -75,4 +75,10 @@ describe Louisville::Extensions::Collision do
 
   end
 
+  context "collision resolver utilities" do
+    it "should choose the correct 'latest' slug" do
+      expect(resolver.send(:provide_latest_slug, 'dog-b--4', 'dog-b--10')).to eq('dog-b--10')
+    end
+  end
+
 end

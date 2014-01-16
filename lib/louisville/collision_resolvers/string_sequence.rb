@@ -9,7 +9,7 @@ module Louisville
 
 
       def next_valid_slug
-        [next_valid_slug_from_table, next_valid_slug_from_history].compact.sort.last
+        provide_latest_slug(next_valid_slug_from_table, next_valid_slug_from_history)
       end
 
 

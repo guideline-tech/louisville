@@ -91,6 +91,11 @@ module Louisville
         "#{base}--#{sequence + 1}"
       end
 
+
+      def provide_latest_slug(*slugs)
+        slugs.compact.sort{|a,b| a.length == b.length ? a <=> b : a.length - b.length }.last
+      end
+
     end
   end
 end
