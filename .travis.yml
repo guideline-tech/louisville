@@ -1,0 +1,30 @@
+language: ruby
+
+services: mysql
+
+before_script:
+  - mysql -e 'create database makara_test;'
+
+before_install:
+  - gem update --system 2.1.11
+  - gem --version
+
+rvm:
+  - 1.8.7
+  - 1.9.2
+  - 1.9.3
+  - 2.0.0
+  - jruby
+
+gemfile:
+  - gemfiles/ar30.gemfile
+  - gemfiles/ar31.gemfile
+  - gemfiles/ar32.gemfile
+  - gemfiles/ar40.gemfile
+
+matrix:
+  exclude:
+    - rvm: 1.8.7
+      gemfile: gemfiles/ar40.gemfile
+    - rvm: 1.9.2
+      gemfile: gemfiles/ar40.gemfile
