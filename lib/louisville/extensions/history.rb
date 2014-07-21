@@ -17,7 +17,9 @@ module Louisville
         base.class_eval do
 
           # provide an association for easy lookup, joining, etc.
-          has_many :historical_slugs, :class_name => 'Louisville::Slug', :dependent => :destroy, :as => :sluggable
+          has_many :historical_slugs, lambda { |klass|
+            where(sluggable_type: Louisville::Util::polymorphic_name(klass.class))
+          }, :class_name => 'Louisville::Slug', :dependent => :destroy, :foreign_key => :sluggable_id
 
           # If our slug has changed we should manage the history.
           after_save :delete_matching_historical_slug,  :if => :louisville_slug_changed?
