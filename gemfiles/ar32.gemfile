@@ -5,7 +5,7 @@ gemspec :path => '../'
 
 
 gem 'rake'
-gem 'activerecord', '3.2.6'
+gem 'activerecord', '3.2.19'
 gem 'rspec'
 gem 'mysql2', :platform => :ruby
 gem 'activerecord-jdbcmysql-adapter', :platform => :jruby

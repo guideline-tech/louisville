@@ -5,7 +5,7 @@ gemspec :path => '../'
 
 
 gem 'rake'
-gem 'activerecord', '3.0.17'
+gem 'activerecord', '3.0.20'
 gem 'rspec'
 
 gem 'mysql2', '0.2.11', :platform => :ruby
