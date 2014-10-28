@@ -67,4 +67,23 @@ describe Louisville::Slugger do
     expect(u.save).to eq(true)
   end
 
+  it 'should only validate when the slug changes or the record is not persisted' do
+    u = MinimalUser.new
+    u.name = 'daniel'
+    expect(u.save).to eq(true)
+
+    u.email = 'd@test.com'
+    expect(u.send(:needs_to_validate_louisville_slug?)).to eq(false)
+
+    u.name = 'danny'
+    u.send(:apply_louisville_slug) # this normally happens before validation
+    expect(u.send(:needs_to_validate_louisville_slug?)).to eq(true)
+
+    u2 = MinimalUser.new
+    expect(u2.send(:needs_to_validate_louisville_slug?)).to eq(true)
+
+    expect(u2.save).to eq(false)
+    expect(u2.errors[:slug].to_s).to match(/blank/)
+  end
+
 end

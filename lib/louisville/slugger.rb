@@ -7,7 +7,7 @@ module Louisville
 
         before_validation :apply_louisville_slug
 
-        validate :validate_louisville_slug
+        validate :validate_louisville_slug, :if => :needs_to_validate_louisville_slug?
       end
     end
 
@@ -87,12 +87,16 @@ module Louisville
 
     def validate_louisville_slug
 
-      if self.louisville_slug.blank?
-        self.errors.add(louisville_config[:column], :blank)
+      if louisville_slug.blank?
+        errors.add(louisville_config[:column], :blank)
         return false
       end
 
       true
+    end
+
+    def needs_to_validate_louisville_slug?
+      new_record? || louisville_slug_changed?
     end
 
   end
