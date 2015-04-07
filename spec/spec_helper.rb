@@ -9,7 +9,7 @@ require 'active_record'
 require 'louisville'
 
 begin
-  require 'debugger'
+  require 'byebug'
 rescue LoadError => e
   puts 'running without debugger'
 end
