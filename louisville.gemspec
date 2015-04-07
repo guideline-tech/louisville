@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Louisville::VERSION
   gem.authors       = ["Mike Nelson"]
   gem.email         = ["mike@mnelson.io"]
-  gem.description   = %q{A simple and extensible slugging library}
-  gem.summary       = %q{A simple and extensible slugging library}
+  gem.description   = %q{A simple and extensible slugging library for ActiveRecord.}
+  gem.summary       = %q{Simple and Extensible Slugging}
   gem.homepage      = "http://github.com/mnelson/louisville"
 
   gem.files         = `git ls-files`.split($/)
