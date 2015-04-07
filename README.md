@@ -2,12 +2,6 @@
 
 This is not a Swiss Army Bulldozer. This is not a Pseudocephalopod. Contrary to popular belief, this was not written in Kentucky. This is a moderately simple, moderately extensible, moderately opinionated slugging library.
 
-## Installation
-
-```ruby
-gem 'louisville', github: 'mnelson/louisville', tag: 'vmajor.minor.path'
-```
-
 ## Usage
 
 Just need the most basic of slugging?
@@ -34,7 +28,7 @@ Need a litte more? The `slug` class method accepts an options hash.
 | :finder    | true         | true          | Adds the finder extension. The finder extension allows `class.find('slug')` to work. |
 | :finder    | false        | true          | Removes the finder option, disabling the `class.find` override. |
 | :collision | :string_sequence | :none     | Handles collisions by appending a sequence to the slug. A generated slug which collides with an existing slug will gain a "--number". So if there was a record with "foobar" as it's slug and another record generated the slug "foobar", the second record would save as "foobar--2". |
-| :collision | :numeric\_sequence | :none    | Handles collisions my incrementing a numeric column named `"#{slug\_column}\_sequence"`. With this configuration, the slug column may not be unique but the `[slug, slug\_sequence]` combination would be. |
+| :collision | :numeric_sequence | :none    | Handles collisions my incrementing a numeric column named `"#{slug_column}_sequence"`. With this configuration, the slug column may not be unique but the `[slug, slug_sequence]` combination would be. |
 | :setter    | Any Valid Ruby Method String | false | Allows the slug generation to be short circuited by providing a setter. Think about a user choosing their username or a page having an seo title. Collisions with the provided value will not be resolved, meaning a validation error will occur if an existing slug is provided. |
 | :history   | true         | false         | When a record's slug changes this will create a record in the slugs table. The finder and collision resolver extensions respect the existence of the history table if this option is enabled.
 

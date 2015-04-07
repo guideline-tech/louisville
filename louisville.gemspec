@@ -7,10 +7,10 @@ Gem::Specification.new do |gem|
   gem.name          = "louisville"
   gem.version       = Louisville::VERSION
   gem.authors       = ["Mike Nelson"]
-  gem.email         = ["mike@mikeonrails.com"]
-  gem.description   = %q{A simple slugging library}
-  gem.summary       = %q{A simple slugging library}
-  gem.homepage      = ""
+  gem.email         = ["mike@mnelson.io"]
+  gem.description   = %q{A simple and extensible slugging library}
+  gem.summary       = %q{A simple and extensible slugging library}
+  gem.homepage      = "http://github.com/mnelson/louisville"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
