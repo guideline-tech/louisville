@@ -79,6 +79,56 @@ describe Louisville::Extensions::History do
 
   end
 
+  it 'allows to use a different than the default sluggable_type using sti_name' do
+    class TheHistoryUser < ActiveRecord::Base
+      self.table_name = :users
+
+      include Louisville::Slugger
+
+      slug :name, :history => true
+
+      def self.sti_name
+        "User"
+      end
+    end
+
+    class AnotherUser < ActiveRecord::Base
+      self.table_name = :users
+
+      include Louisville::Slugger
+
+      slug :name, :history => true
+
+      def self.sti_name
+        "User"
+      end
+    end
+
+    u = TheHistoryUser.new
+    u.name = 'zoe'
+
+    expect{
+      expect(u.save).to eq(true)
+    }.not_to change(Louisville::Slug, :count)
+
+    u.name = 'zoey'
+    expect{
+      expect(u.save).to eq(true)
+    }.to change(Louisville::Slug, :count).by(1)
+
+    expect(u.slug).to eq('zoey')
+    history = Louisville::Slug.last
+
+    expect(history.sluggable_type).to eq('User')
+    expect(history.sluggable_id).to eq(u.id)
+
+    expect(history.slug_base).to eq('zoe')
+    expect(history.slug_sequence).to eq(1)
+
+    found_user_using_other_class = AnotherUser.find("zoe")
+    expect(found_user_using_other_class.id).to eql(u.id)
+  end
+
   it 'should destroy the slugs when a record is destroyed' do
     u = MinimalHistoryUser.new
     u.name = 'jackford'
