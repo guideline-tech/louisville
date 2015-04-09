@@ -36,7 +36,7 @@ module Louisville
 
       def historical_slugs
         return ::Louisville::Slug.where('1=0') unless persisted?
-        ::Louisville::Slug.where(sluggable_id: id, sluggable_type: ::Louisville::Util.polymorphic_name(self.class))
+        ::Louisville::Slug.where(:sluggable_id => id, :sluggable_type => ::Louisville::Util.polymorphic_name(self.class))
       end
 
 
