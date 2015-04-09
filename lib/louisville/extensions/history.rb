@@ -12,23 +12,40 @@ module Louisville
   module Extensions
     module History
 
+      module ClassMethods
+
+        def historical_slug_sluggable_type
+          self.sti_name
+        end
+
+      end
+
 
       def self.included(base)
         base.class_eval do
 
-          # provide an association for easy lookup, joining, etc.
-          has_many :historical_slugs, :class_name => 'Louisville::Slug', :dependent => :destroy, :as => :sluggable
+          extend ::Louisville::Extensions::History::ClassMethods
 
           # If our slug has changed we should manage the history.
           after_save :delete_matching_historical_slug,  :if => :louisville_slug_changed?
           after_save :generate_historical_slug,         :if => :louisville_slug_changed?
+
+          before_destroy :destroy_historical_slugs!
         end
       end
 
+      def historical_slugs
+        return ::Louisville::Slug.where('1=0') unless persisted?
+        ::Louisville::Slug.where(sluggable_id: id, sluggable_type: ::Louisville::Util.polymorphic_name(self.class))
+      end
 
 
       protected
 
+
+      def destroy_historical_slugs!
+        historical_slugs.destroy_all
+      end
 
 
       # First, we delete any previous slugs that this record owned that match the current slug.
