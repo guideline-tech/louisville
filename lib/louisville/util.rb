@@ -30,6 +30,7 @@ module Louisville
 
 
       def polymorphic_name(klass)
+        return klass.historical_slug_sluggable_type if klass.respond_to?(:historical_slug_sluggable_type)
         klass.base_class.sti_name
       end
 

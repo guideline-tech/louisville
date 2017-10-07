@@ -17,6 +17,11 @@ module Louisville
         base.class_eval do
           class << self
             alias_method_chain :relation, :louisville_finder
+
+            if ActiveRecord::VERSION::MAJOR >= 4 && ActiveRecord::VERSION::MINOR >= 2
+              alias_method_chain :find, :louisville_finder
+            end
+
           end
         end
       end
@@ -24,6 +29,17 @@ module Louisville
 
 
       module ClassMethods
+
+        def find_with_louisville_finder(*args)
+          return find_without_lousville_finder(*args) if args.length != 1
+
+          id = args[0]
+          id = id.id if ActiveRecord::Base === id
+          return find_without_louisville_finder(*args) if Louisville::Util.numeric?(id)
+
+          relation_with_louisville_finder.find_one(id)
+        end
+
         private
 
         def relation_with_louisville_finder

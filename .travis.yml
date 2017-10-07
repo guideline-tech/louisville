@@ -15,6 +15,7 @@ rvm:
   - 1.9.2
   - 1.9.3
   - 2.0.0
+  - 2.1.5
   - jruby
 
 gemfile:
@@ -23,6 +24,7 @@ gemfile:
   - gemfiles/ar32.gemfile
   - gemfiles/ar40.gemfile
   - gemfiles/ar41.gemfile
+  - gemfiles/ar42.gemfile
 
 matrix:
   exclude:
@@ -34,3 +36,7 @@ matrix:
       gemfile: gemfiles/ar41.gemfile
     - rvm: 1.9.2
       gemfile: gemfiles/ar41.gemfile
+    - rvm: 1.8.7
+      gemfile: gemfiles/ar42.gemfile
+    - rvm: 1.9.2
+      gemfile: gemfiles/ar42.gemfile

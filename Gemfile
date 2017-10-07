@@ -7,4 +7,5 @@ gemspec
 gem 'rake'
 gem 'mysql2'
 gem 'rspec'
-gem 'debugger'
+gem 'byebug'
+gem 'activerecord', '~> 4.2.0'
