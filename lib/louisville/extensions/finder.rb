@@ -44,7 +44,7 @@ module Louisville
 
         def relation_with_louisville_finder
           rel = relation_without_louisville_finder
-          rel.extend RelationMethods unless rel.respond_to?(:find_one_with_louisville)
+          rel.extend RelationMethods
           rel
         end
       end
